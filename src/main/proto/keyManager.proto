@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.zup.edu";
+option java_outer_classname = "KeyManager";
+option objc_class_prefix = "HLW";
+
+package br.com.zup.edu;
+
+import "google/protobuf/timestamp.proto";
+
+service KeyManagerService {
+    rpc registerKey (RegisterKeyRequest) returns (RegisterKeyResponse) {}
+
+}
+
+service KeyRemoveService {
+    rpc removeKey(RemoveKeyRequest) returns (RemoveKeyResponse) {}
+}
+
+service KeyConsultService {
+    rpc consultKey(ConsultKeyRequest) returns (ConsultKeyResponse) {}
+}
+
+service KeyListService {
+    rpc listKey(ListKeyRequest) returns (ListKeyResponse) {}
+}
+
+enum TypeKey {
+    UNKNOWN_TYPE_KEY = 0;
+    RANDOM = 1;
+    CPF = 2;
+    PHONE = 3;
+    EMAIL = 4;
+}
+
+enum TypeAccount {
+    UNKNOWN_TYPE_ACCOUNT = 0;
+    CONTA_CORRENTE = 1;
+    CONTA_POUPANCA = 2;
+}
+
+message RegisterKeyRequest {
+    string user_id = 1;
+    TypeKey type_key = 2;
+    string key_value = 3;
+    TypeAccount type_account = 4;
+}
+
+message RegisterKeyResponse {
+    string pix_id = 1;
+    string user_id = 2;
+}
+
+message RemoveKeyRequest {
+    string pix_id = 1;
+    string user_id = 2;
+}
+
+message RemoveKeyResponse {
+    string message = 1;
+    string pix_id = 2;
+    string user_id = 3;
+}
+
+message ConsultKeyRequest {
+    message PixIdFilter {
+        string user_id = 1;
+        string pix_id = 2;
+    }
+
+    oneof filter {
+        PixIdFilter pix_id = 1;
+        string key = 2;
+    }
+}
+
+message ConsultKeyResponse {
+    message PixKey {
+        message AccountInfo {
+            TypeAccount type = 1;
+            string institution = 2;
+            string owner_name = 3;
+            string owner_cpf = 4;
+            string branch = 5;
+            string account_number = 6;
+        }
+        TypeKey type = 1;
+        string key = 2;
+        AccountInfo account = 3;
+        google.protobuf.Timestamp createdAt = 4;
+    }
+    string user_id = 1;
+    string pix_id = 2;
+    PixKey key = 3;
+}
+
+message ListKeyRequest {
+    string user_id = 1;
+}
+
+message ListKeyResponse {
+    message PixKey {
+        string pix_id = 1;
+        TypeKey type = 2;
+        string key = 3;
+        TypeAccount type_account = 4;
+        google.protobuf.Timestamp createdAt = 5;
+    }
+    string user_id = 1;
+    repeated PixKey keys = 2;
+}
