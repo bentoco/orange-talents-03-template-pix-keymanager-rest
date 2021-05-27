@@ -4,10 +4,17 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "1.5.0"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
+    id("com.google.protobuf") version "0.8.15"
 }
 
 version = "0.1"
 group = "br.com.zup.edu"
+
+ext {
+    protocVersion="3.12.2"
+    grpcVersion="1.29.0"
+    grpcKotlinVersion="0.1.2"
+}
 
 repositories {
     mavenCentral()
@@ -34,6 +41,9 @@ dependencies {
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    //gRPC
+    implementation("io.micronaut.grpc:micronaut-grpc-client-runtime")
+
 }
 
 
@@ -57,4 +67,23 @@ tasks {
     }
 
 
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs("build/generated/source/proto/main/grpc")
+            srcDirs("build/generated/source/proto/main/java")
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:3.14.0" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.33.1" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
 }
