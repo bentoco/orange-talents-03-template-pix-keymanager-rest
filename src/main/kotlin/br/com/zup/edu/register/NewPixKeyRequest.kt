@@ -28,17 +28,28 @@ class NewPixKeyRequest(
 enum class TypeKeyRequest(val attributeGrpc: TypeKey) {
     CPF(TypeKey.CPF) {
         override fun validate(key: String?): Boolean {
-            return key!!.matches("^[0-9]{11}\$".toRegex())
+            if (key.isNullOrBlank()) {
+                return false
+            }
+            return key.matches("^[0-9]{11}\$".toRegex())
         }
     },
     EMAIL(TypeKey.EMAIL) {
+
         override fun validate(key: String?): Boolean {
-            return key!!.matches("^[A-Za-z0-9+_.-]+@(.+)$".toRegex())
+            if (key.isNullOrBlank()) {
+                return false
+            }
+            return key.matches("^[A-Za-z0-9+_.-]+@(.+)$".toRegex())
         }
     },
     PHONE(TypeKey.PHONE) {
+
         override fun validate(key: String?): Boolean {
-            return key!!.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
+            if (key.isNullOrBlank()) {
+                return false
+            }
+            return key.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
         }
     },
     RANDOM(TypeKey.RANDOM) {
