@@ -1,9 +1,6 @@
 package br.com.zup.edu.grpc
 
-import br.com.zup.edu.KeyConsultServiceGrpc
-import br.com.zup.edu.KeyListServiceGrpc
-import br.com.zup.edu.KeyManagerServiceGrpc
-import br.com.zup.edu.KeyRemoveServiceGrpc
+import br.com.zup.edu.*
 import io.grpc.ManagedChannel
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
